@@ -1,7 +1,6 @@
 var request = require('request');
 var cameras; // Array of all cameras which is refreshed everytime the map is initialized
 var selectedCamera; // Selected camera object
-var token;
 
 //------------------------------------------------------------------------------
 // Grab all camera data from data.gov.sg API
@@ -125,7 +124,7 @@ function analyze(token) {
         console.log(err);
       } else {
         var result = JSON.stringify(res, null, 2);
-        return JSON.parse(result).images[0].classifiers[0].classes[0].class;
+        return JSON.parse(result).images[0].classifiers[0].classes[0].class; // Get the class with the highest confidence
       }
     });
 }
