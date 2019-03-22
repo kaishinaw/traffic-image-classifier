@@ -65,49 +65,12 @@ function changeContent(camera_id) {
 		if(cameras[i].camera_id == camera_id) {
 			selectedCamera = cameras[i];
 			// Trigger Watson classification and save to classificationResult
-			console.log(getToken().then(analyze));  // Currently console logging to debug
+			classificationResult = getToken().then(analyze);
 		}
 	}
 	
 	var contentChange = document.getElementById('result'); // Target the results div
-	contentChange.innerHTML = objToStr(selectedCamera, classificationResult)
-}
-
-
-//------------------------------------------------------------------------------
-// Use Watson Visual Recognition to classify images
-//------------------------------------------------------------------------------
-var VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
-
-/**
- * @return {Promise<String>} returns a promise that resolves to a string token
- */
-function getToken() {
-  	return fetch('/api/token/visual_recognition').then(function(response) {
-    	token = response.text();
-  	});
-}
-
-function analyze(token) {
-	
-    var visualRecognition = new VisualRecognitionV3({
-      url: 'https://gateway.watsonplatform.net/visual-recognition/api',
-      version: '2018-03-19',
-      iam_apikey: <iam_apikey>,
-      token: token,
-    });
-    
-    var params = {
-      images_file: request.get(selectedCamera.image, stream=True)
-    };
-    
-    visualRecognition.classify(params, function(err, res) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(JSON.stringify(res, null, 2));  // Not doing anything with the return yet as the error throws at this stage
-      }
-    });
+	contentChange.innerHTML = objToStr(selectedCamera, classificationResult);
 }
 
 // Convert result to be displayed to string
@@ -124,6 +87,47 @@ function objToStr(camera, classificationResult) {
 		</div>
 	`
 }
+
+//------------------------------------------------------------------------------
+// Use Watson Visual Recognition to classify images
+//------------------------------------------------------------------------------
+var VisualRecognitionV3 = require('watson-developer-cloud/visual-recognition/v3');
+var fs = require('fs');
+
+/**
+ * @return {Promise<String>} returns a promise that resolves to a string token
+ */
+function getToken() {
+  	return fetch('/api/token/visual_recognition').then(function(response) {
+    	token = response.text();
+  	});
+}
+
+function analyze(token) {
+	
+    var visualRecognition = new VisualRecognitionV3({
+      url: 'https://gateway.watsonplatform.net/visual-recognition/api',
+      version: '2018-03-19',
+      iam_apikey: 'IQRru6KdJgFhyvOzNSVcihGAKIQEeOe6uo27aenGxI7P',
+      token: token,
+    });
+    
+    var params = {
+      url: selectedCamera.image,
+      classifier_ids: ["DefaultCustomModel_1298289964"];
+    };
+    
+    visualRecognition.classify(params, function(err, res) {
+      if (err) {
+        console.log(err);
+      } else {
+        var result = JSON.stringify(res, null, 2);
+        return JSON.parse(result).images[0].classifiers[0].classes[0].class;
+      }
+    });
+}
+
+
 
 
 
