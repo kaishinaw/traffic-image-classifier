@@ -1,0 +1,5 @@
+applications:
+- name: node-hello-world
+  memory: 128M
+  buildpack: sdk-for-nodejs
+  timeout: 180
