@@ -1,0 +1,22 @@
+{
+	"name": "HelloWorldNodeApp",
+	"version": "0.0.1",
+    "private": true,
+	"scripts": {
+		"start": "browserify public/index.js -o public/bundle.js && node app.js"
+	},
+	"dependencies": {
+		"express": "4.13.x",
+		"cfenv": "1.0.x",
+		"request": "2.88.x",
+		"browserify": "16.2.x",
+		"express-browserify": "1.0.x",
+		"dotenv": "7.0.x",
+		"watson-developer-cloud": "3.18.0",
+		"fs": "0.0.1-security"
+	},
+	"repository": {},
+	"engines": {
+		"node": "^10.15.x"
+	} 
+}
