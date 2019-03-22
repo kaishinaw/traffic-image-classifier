@@ -112,9 +112,12 @@ function analyze(token) {
       token: token,
     });
     
+    var url = selectedCamera.image;
+    var classifier_ids = ["DefaultCustomModel_1298289964"];
+    
     var params = {
-      url: selectedCamera.image,
-      classifier_ids: ["DefaultCustomModel_1298289964"];
+      url: url,
+      classifier_ids: classifier_ids
     };
     
     visualRecognition.classify(params, function(err, res) {
@@ -126,10 +129,4 @@ function analyze(token) {
       }
     });
 }
-
-
-
-
-
-
 
